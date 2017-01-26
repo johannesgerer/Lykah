@@ -1,0 +1,11 @@
+flags: {}
+pvp-bounds: both
+extra-package-dbs: []
+packages:
+- '.'
+extra-deps:
+- blazeT-0.0.5
+- cond-0.4.1.1
+- filesystem-trees-0.1.0.6
+- clay-0.12.1
+resolver: lts-7.14
