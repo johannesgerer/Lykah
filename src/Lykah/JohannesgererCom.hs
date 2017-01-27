@@ -37,10 +37,11 @@ import           Text.BlazeT.Html5.Attributes hiding (id)
 
 website = do
   posts <- myPosts
-  return $ Website theme "UA-27460943-1" pages posts assets
+  return $ Website theme "http://johannesgerer.com" "UA-27460943-1"
+    pages posts assets
 
 main :: IO ()
-main = generateAssets True "output" . renderWebsite =<< website
+main = generateAssets True "output". renderWebsite =<< website
 
 assets :: [Pathed Asset]
 assets@(photo:photoLR:wincor:diss:diplom:tensor:dirac:memisScreen:
@@ -87,7 +88,7 @@ engineScreenshots = g <$>
           $ Copy $ "assets/screenshots/" <> src <> ".png"
   
 pages@[about,finance,software,physics] = [
-    page "about"    "About me" "./" Nothing $
+    page "about"    "About me" "" Nothing $
       H.div ! class_ "body" $ do
         floatingImage 2 True "" (Just photoLR) photo $ Just $ mapM_ p
             ["I am a finance scholar, a software engineer and a physicist. My passion is tackling problems that can only be solved with the use of mathematics and/or technology."

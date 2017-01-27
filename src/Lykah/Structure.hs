@@ -26,6 +26,7 @@ import           Lykah.EHtml
 
 
 data Website = Website { wTheme  :: Theme
+                       , wRoot   :: String
                        , googleAnalyticsId :: Text
                        , wMenu  :: [PathedPage ()]
                        , wPosts  :: [PathedPage Post]
@@ -112,17 +113,17 @@ data Post = Post {poDate  :: ZonedTime
               deriving Show
                      
 renderWebsite :: Website -> Assets
-renderWebsite website =
-  onlyUsed used $
-  assets' ++ rendered
+renderWebsite website@Website{wRoot = root , wMenu = pages, wPosts = posts} =
+  sitemap' : (onlyUsed used $ assets' ++ rendered)
   where s = fmap strip
-        env = s (wMenu website) ++ s (wPosts website) ++ s assets'
-        (rendered,used) = mconcat $ (renderPage askBody <$> (wMenu website))
-                          ++ (renderPage (tPost th True) <$> (wPosts website))
+        env = s pages ++ s posts ++ s assets'
+        (rendered,used) = mconcat $ (renderPage askBody <$> pages)
+                          ++ (renderPage (tPost th True) <$> posts)
         renderPage :: (SHtml a) -> PathedPage a -> (Assets,[Identifier])
         renderPage templ p = renderEHtml (website,p) env $  tPage th templ
         assets' = wAssets website ++ tAssets th
         th = wTheme website
+        sitemap' = sitemap root $ onlyUsed used rendered
 
 instance Show a => Show (Page a) where
   show p = "Page { pTitle = "++ T.unpack(renderHtml $ pTitle p)++", pBody, pDetails = "

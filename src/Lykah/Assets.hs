@@ -30,6 +30,7 @@ module Lykah.Assets
   ,lookupNamedId
   ,generateAssets
   ,onlyUsed
+  ,sitemap
   ,Text
   ,module Control.Applicative
   ,module Control.Arrow
@@ -67,6 +68,8 @@ import           Data.Either
 import           Data.Foldable hiding (mapM_)
 import           Data.Function
 import           Data.List
+import qualified Data.ListLike as L
+import qualified Data.ListLike.String as L
 import qualified Data.Map.Strict as M
 import           Data.Maybe
 import           Data.Monoid
@@ -172,6 +175,12 @@ toConcatList x = [x]
 
 type Assets = [Pathed Asset]
 
+-- | generate a @/sitemap.txt@ for a list of assets based
+sitemap :: FilePath -- ^ root url
+        -> [Pathed Asset] -> Pathed Asset
+sitemap root x = Pathed "sitemap.txt" "sitemap" (Just "sitemap") Nothing
+          $ Write $ L.unlines $ (fromString . dropTrailingPathSeparator.
+                                 (root </>) . aPath) <$> x
 
 strip :: Pathed a -> Pathed ()
 strip = fmap (const ())
@@ -204,7 +213,7 @@ generateAssets debug dir assets  = do
   mapM_ (performeAction . modifyAss)  assets
   where
     modifyAss a@(Pathed{aPath = f}) = a{aPath=f'}
-      where f' = if hasTrailingPathSeparator f then
+      where f' = if null f || hasTrailingPathSeparator f then
                    f </> "index.html"
                  else f
     performeAction p@(Pathed{aPath=target, aId=aid}) = do
