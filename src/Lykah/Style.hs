@@ -33,6 +33,8 @@ bw = False
 
 myCss' :: Clay.Stylesheet.StyleM ()
 myCss' = do
+  html ? do
+    overflowY scroll
   body ? do
     margin nil nil nil nil
     fAbel
@@ -339,24 +341,19 @@ myCss' = do
       ".letterSpace" ? do
         letterSpacing $ px 1
     ".menu" & do
-      ".menuItem4" ? color
+      ".menuItem1" ? color
         -- "#1AE800"
         -- "#00c100"
         "#00b922"
-      ".menuItem1" ? color
+      ".menuItem2" ? color
         "#0098FF"
         -- "#0070FF"
-      ".menuItem2" ? color
+      ".menuItem4" ? color
         "#E30053"
         -- "#E8009B"
       ".menuItem3" ? color
         -- "#FFA600"
         "#deb200"
-      ".menuItem5" ? color -- "#d4be00"
-                       -- "#eabd07"
-                      "#deb200"
-        -- "##9f8000"
-                    -- "#8d6708"
     ".menuFiveElement" & do
       ".menuItem1" ? color
           -- "#007a4b"

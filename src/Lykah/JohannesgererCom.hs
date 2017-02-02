@@ -65,6 +65,7 @@ assets@(photo:photoLR:wincor:diss:diplom:tensor:dirac:memisScreen:
   ]
   <> fmap fst (hedgefundScreens :: [(Pathed Asset, MarkupT Maybe ())])
   <> engineScreenshots
+  <> dissChaps
 
 hedgefundScreens :: Monad m => [(Pathed Asset, MarkupT m ())]
 hedgefundScreens = (g *** p) <$>
@@ -74,6 +75,11 @@ hedgefundScreens = (g *** p) <$>
   ]
   where g src = Pathed ("img" <> src2) src Nothing Nothing $ Copy $ "assets" <> src2
           where src2 = "/hedgefund/" <> src <.> "jpg"
+
+dissChaps :: [Pathed Asset]
+dissChaps = g . show <$>  [1..4]
+  where g src = Pathed ("img/diss_johannes_gerer_" <> src <.> "pdf") src Nothing Nothing
+          $ Copy $ "assets/diss_johannes_gerer_" <> src <.> "pdf"
 
 engineScreenshots :: [Pathed Asset]
 engineScreenshots = g <$>
@@ -109,7 +115,7 @@ pages@[about,finance,software,physics] = [
              ]
             ,["Social"
              ,sequence_ $ intersperse " "
-               [linkB "https://www.linkedin.com/in/dr-hans-wurscht-8827694/"
+               [linkB "https://www.linkedin.com/in/johannes-gerer"
                  "LinkedIn"
                ,linkB "https://github.com/johannesgerer/"
                  "Github"
@@ -136,35 +142,47 @@ pages@[about,finance,software,physics] = [
                 " (PDF, 134 Pages, 0.9 MB). It is cumulative and consists of the following four research articles:"
             ,"The first three articles take a theoretical perspective on the pricing of derivatives with embedded decisions and the associated aspect of dynamic hedging. The fourth article is an empirical study on the pricing of exchange-traded commodities (ETCs)."
             ]
-        publication "Time consistent pricing of options with embedded decisions"
+        publication 1 "Time consistent pricing of options with embedded decisions"
           ["G. Dorfleitner"]
-          ["Under review for publication in ", em "Mathematical Finance"] $ p
-          "Aiming to establish new methods for handling decisions embedded in derivative contracts that help to overcome the shortcomings of existing approaches, this article lays the foundation and derives a pricing principle for options with decisions"
-        publication (anchor amop <> "Optimal discrete hedging of American options")
+          ["Under review for publication in ", em "Mathematical Finance"] $ mapM_ p $
+          ["Aiming to establish new methods for handling decisions embedded in derivative contracts that help to overcome the shortcomings of existing approaches, this article lays the foundation and derives a pricing principle for options with decisions."
+          ,abstract
+           ["Many financial contracts are equipped with exercise rights or other features enabling the parties to actively shape the contract's payoff. These decisions pose a great challenge for the pricing and hedging of such contracts. Yet, the literature lacks a consistent way of dealing with these decisions, and instead only provides methods for specific contracts and not transferable to other models."
+           ,"In this paper we present a framework that allows us to separate the treatment of the decisions from the pricing problem and derive a general pricing principle for the price of an option with decisions by both parties. To accomplish this we present a general version of the duality between acceptance sets and pricing functions, and use it to translate the pricing problem into the language of acceptance. Expressing certain aspects of economic behavior in this language is sufficient to fully eliminate the decisions from the problem."
+           ,"Further, we demonstrate why time consistent pricing functions are crucial when dealing with options with embedded decisions and how the ad-hoc pricing functions used in many contributions can be derived if time consistency is added to our minimal set of assumptions."
+           ]
+          ]
+        publication 2 (anchor amop <> "Optimal discrete hedging of American options")
           ["G. Dorfleitner"]
           ["Accepted for publication in ", em "Review of Derivatives Research"
           , " subject to minor revisions"
           ] $ do
-          mapM_ p
+          mapM_ p $
             ["This article extends the above mentioned principle to the problem of realistic hedging and applies it to American options."
             ,"It contains numerical results that have been obtained using my C++ pricing software "
               <> namedLinkF' fipster "fipster" software
               <> "."
+            , abstract
+              ["In order to solve the problem of optimal discrete hedging of American options, this paper utilizes an integrated approach in which the writer's decisions (including hedging decisions) and the holder's decisions are treated on equal footing. From basic principles expressed in the language of acceptance sets we derive a general pricing and hedging formula and apply it to American options. The result combines the important aspects of the problem into one price. It finds the optimal compromise between risk reduction and transaction costs, i.e. optimally placed rebalancing times. Moreover, it accounts for the interplay between the early exercise and hedging decisions."
+              ,"We then perform a numerical calculation to compare the price of an agent who has exponential preferences and uses our method of optimal hedging against a delta hedger. The results show that the optimal hedging strategy is influenced by the early exercise boundary and that the worst case holder behavior for a sub-optimal hedger significantly deviates from the classical Black-Scholes exercise boundary."
+              ]
             ]
-        publication "A note on utility indifference pricing"
+        publication 3 "A note on utility indifference pricing"
           ["G. Dorfleitner"]
           [linkB "http://www.worldscientific.com/doi/abs/10.1142/S0219024916500370?src=recsys&"
             "Published"
           , em " in the International Journal of Theoretical and Applied Finance"
-          ] $ p
-            "The third article addresses problems with many utility functions that are used to derive prices in incomplete markets; problems encountered during the work on the second article. It reveals severe limitations to the practical applicability of two well-established parts of the pricing and hedging literature, namely 'utility indifference pricing' and so-called 'utility-based pricing'."
-        publication "The pricing efficiency of exchange-traded commodities"
+          ] $ mapM_ p $
+          ["The third article addresses problems with many utility functions that are used to derive prices in incomplete markets; problems encountered during the work on the second article. It reveals severe limitations to the practical applicability of two well-established parts of the pricing and hedging literature, namely 'utility indifference pricing' and so-called 'utility-based pricing'."
+          ,abstract $ pure $ "Utility-based valuation methods are enjoying growing popularity among researchers as a means to overcome the challenges in contingent claim pricing posed by the many sources of market incompleteness.  However, we show that under the most common utility functions (including CARA and CRRA), any realistic and actually practicable hedging strategy involving a possible short position has infinitely negative utility. We then demonstrate for utility " <> em "indifference prices" <> " (and also for the related so-called " <> em "utility-based (marginal) prices" <> ") how this problem leads to a severe divergence between results obtained under the assumption of continuous trading and realistic results. The combination of continuous trading and common utility functions is thus not justified in these methods, raising the question of whether and how results obtained under such assumptions could be put to real-world use."
+          ]
+        publication 4 (anchor etcs <> "The pricing efficiency of exchange-traded commodities")
           ["G. Dorfleitner", "A. Gerl"]
           [linkB "http://link.springer.com/article/10.1007/s11846-016-0221-0"
            "Published"
            , em " in Review of Managerial Science"
-          ] $ p
-            "This article examines daily pricing data of 237 ETCs traded on the German market from 2006 to 2012 using different measures for price deviations and pricing efficiency. It is the first study to systematically explore the pricing efficiency of ETCs and its sample is unique in size and regional focus. It finds that, on average, ETCs trade at a premium over their fair price. Furthermore, nine hypotheses on factors that are expected to influence pricing efficiency are formulated and tested using regression analysis. Statistical evidence is found for seven of the nine hypotheses."
+          ] $ p $
+          abstract $ pure "Exchange-traded commodities (ETCs) open the commodity markets to both private and institutional investors. This paper is the first to examine the pricing efficiency and potential determinants of price deviations of this new class of derivatives based on daily data of 237 ETCs traded on the German market from 2006 to 2012. Given the unique size of the sample, we employ the premium/discount analysis, quadratic and linear pricing methods, as well as regression models. We find that the ETCs incur, on average, price deviations in their daily trading and are more likely to trade at a premium from their net asset values than at a discount. In addition, we examine the influence of certain factors such as management fees, commodity sectors, issuers, spread, assets under management, investment strategies, replication and collateralization methods on quadratic and linear price deviations."
         subSect ((anchor pfa <>) . (H.h2 ! dataAttribute "title" ""))
           "Postbank Finance Award 2008" $ do
           p $ do
@@ -315,6 +333,12 @@ pages@[about,finance,software,physics] = [
           p "I use python to hack on open-source code bases of programs that I use myself."
         softwareProject "Linux and Shell" Nothing $
           p "Since 2012, I am an Arch Linux/Xmonad/emacs power user that switched from Windows 7 and never looked back."
+        softwareProject "R Statistical Software" Nothing $
+          p $ "Used for statistical analysis in my finance research, e.g. for the results of my paper on "
+            <> namedLinkF' etcs "ETCs" finance
+            <> "."
+        -- softwareProject "Emacs Lisp" Nothing $
+        --   p "a"
     ,page "physics" "Physics"       "physics/" Nothing $ 
       H.div ! class_ "body" $ do
         p $ do
@@ -348,9 +372,10 @@ pages@[about,finance,software,physics] = [
 blog :: PathedPage ()
 blog = page "blog"     "Blog"           "blog/" Nothing $ postList $ const True
 
-fragments@[pfa,lykah,fipster,amop] =
+fragments@[pfa,lykah,etcs,fipster,amop] =
   ["pfa"
   ,"lykah"
+  ,"etcs"
   ,"fipster"
   ,"amop"
   ]
@@ -393,19 +418,25 @@ emailAddress = do
     textComment "\nvar fscuanb = ['=','o','>','<','a','o','r','<','g','f','\"','j','l','a','e','e','c','g','m','r','n','/','.','m','>','o','l','a','\"','a','e','c','j','s',' ','h','=','s',':','h','j','@','r','o','r','t',' ','s','a','i','e','h','m','a','\"','s','r','j','e','o','e','@','a','n','n','n','c','e','m','e','i','\"','l','.'];var mvfrrrw = [42,54,73,0,21,33,63,70,61,6,49,51,48,1,44,29,67,26,45,30,22,71,31,69,50,14,38,10,8,46,27,32,18,40,36,55,7,41,15,3,53,52,65,68,28,13,2,25,56,47,62,20,34,39,35,60,4,16,24,19,64,17,72,57,23,58,37,5,9,59,11,43,12,66];var bhufbnr= new Array();for(var i=0;i<mvfrrrw.length;i++){bhufbnr[mvfrrrw[i]] = fscuanb[i]; }for(var i=0;i<bhufbnr.length;i++){document.write(bhufbnr[i]);}\n"
   noscript $ "Please enable Javascript to see the email address"
 
-publication :: Monad m
-            => MarkupT m () -- ^ title
-            -> [T.Text] -- ^ coauthors
-            -> [MarkupT m ()] -- ^ status
-            -> MarkupT m () -- ^ body
-            -> MarkupT m ()
-publication title coauths status body =
+-- publication :: Monad m
+--             => Int -- ^ essay number
+--             -> MarkupT m () -- ^ title
+--             -> [T.Text] -- ^ coauthors
+--             -> [MarkupT m ()] -- ^ status
+--             -> MarkupT m () -- ^ body
+--             -> MarkupT m ()
+publication n title coauths status body =
   chapter title $ do
   p $ do
     text $ "(with " <> T.intercalate ", " coauths <> ". "
     mconcat status
-    ".)"
+    ". " <> namedLink' "Download" (dissChaps !! pred n) <> " chapter.)"
   body
 
 more :: IDO b => b -> EHtml a ()
 more pId = "See " <> namedLink' "more" pId <> "."
+
+abstract :: Monad m => [MarkupT m ()] -> MarkupT m ()
+abstract x = do
+  p $ em "Abstract:"
+  sequence_ $ intersperse br x
