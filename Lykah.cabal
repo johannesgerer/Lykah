@@ -39,27 +39,28 @@ executable lykah
               , Lykah.Structure
               , Lykah.Style
               , Lykah.Theme2
-  build-depends:       base
+  build-depends:       ListLike
+                     , aeson >= 1.0.0
+                     , array >= 0.5.0.0
+                     , base
                      , blaze-markup >= 0.7.1
-                     , ListLike
+                     , blazeT >= 0.0.5
+                     , clay >= 0.12
+                     , containers >= 0.5.5.1
+                     , directory < 1.3
+                     , filepath
+                     , filesystem-trees
+                     , formatting
+                     , mtl
+                     , old-locale
+                     , regex-compat
+                     , regex-posix
                      , safe
                      , split
+                     , template-haskell
                      , text
                      , time
                      , transformers
-                     , mtl
-                     , containers >= 0.5.5.1
-                     , array >= 0.5.0.0
-                     , filepath
-                     , template-haskell
-                     , regex-posix
-                     , regex-compat
-                     , clay >= 0.12
-                     , old-locale
-                     , blazeT >= 0.0.5
-                     , directory
-                     , filesystem-trees
-                     , formatting
   default-language:    Haskell2010
    
 library
@@ -79,25 +80,26 @@ library
               , Lykah.Structure
               , Lykah.Style
               , Lykah.Theme2
-  build-depends:       base
+  build-depends:       ListLike
+                     , aeson >= 1.0.0
+                     , array >= 0.5.0.0
+                     , base
                      , blaze-markup >= 0.7.1
-                     , ListLike
+                     , blazeT >= 0.0.5
+                     , clay >= 0.12
+                     , containers >= 0.5.5.1
+                     , directory < 1.3
+                     , filepath
+                     , filesystem-trees
+                     , formatting
+                     , mtl
+                     , old-locale
+                     , regex-compat
+                     , regex-posix
                      , safe
                      , split
+                     , template-haskell
                      , text
                      , time
                      , transformers
-                     , mtl
-                     , containers >= 0.5.5.1
-                     , array >= 0.5.0.0
-                     , filepath
-                     , template-haskell
-                     , regex-posix
-                     , regex-compat
-                     , clay >= 0.12
-                     , old-locale
-                     , blazeT >= 0.0.5
-                     , directory
-                     , filesystem-trees
-                     , formatting
   default-language:    Haskell2010

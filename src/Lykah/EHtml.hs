@@ -16,6 +16,8 @@ module Lykah.EHtml
          )
        where
 
+import           Data.Aeson
+import           Data.Aeson.Types
 import qualified Data.ListLike as L
 import qualified Data.ListLike.String as L
 import qualified Data.Text.Lazy as T
@@ -26,7 +28,7 @@ import           Text.Blaze.Internal (Attributable)
 import           Text.BlazeT
 import qualified Text.BlazeT as B
 import qualified Text.BlazeT.Html5 as H
-import           Text.BlazeT.Html5 hiding (link)
+import           Text.BlazeT.Html5 hiding (link, object)
 import qualified Text.BlazeT.Html5.Attributes as A
 import           Text.BlazeT.Html5.Attributes hiding (id)
 import           Text.BlazeT.Renderer.Text
@@ -55,8 +57,17 @@ renderEHtml cur refs x = ([fmap (const $ Write t) $ snd cur], ids)
 poster :: AttributeValue -> Attribute
 poster = customAttribute "poster"
 
+stylesheet :: Monad m => AttributeValue -> MarkupT m ()
 stylesheet x = H.link ! rel "stylesheet" ! type_ "text/css" ! href x
+
+javascript :: Monad m => AttributeValue -> MarkupT m ()
 javascript x = script ! src x $ mempty
+
+jsonLd' :: Monad m => MarkupT m () -> MarkupT m ()
+jsonLd' = script ! type_ "application/ld+json"
+
+jsonLd :: Monad m => [Pair] -> MarkupT m ()
+jsonLd = jsonLd' . unsafeLazyByteString . encode . object
 
 dashAttr ['href,'A.id,'A.style,'A.type_,'A.src,'poster,'A.for,'value,'class_, 'stylesheet, 'javascript]
 dashTag ['a,'b,'h1,'video,'H.label, 'H.title,'script]

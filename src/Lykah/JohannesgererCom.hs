@@ -10,6 +10,7 @@
 module Lykah.JohannesgererCom
   where
 
+import           Data.Aeson
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import           Lykah.EHtml
@@ -92,9 +93,18 @@ engineScreenshots = g <$>
   ]
   where g src = Pathed ("img/61engine-" <> src <> ".png") src Nothing Nothing
           $ Copy $ "assets/screenshots/" <> src <> ".png"
+
   
 pages@[about,finance,software,physics] = [
-    page "about"    "About me" "" Nothing $
+    page "about"    "About me" "" Nothing $ do
+      photoUrl <- ("https://johannesgerer.com" </>) <$> path' photo
+      jsonLd
+        ["@context" .= ("http://schema.org" :: String)
+        ,"@type" .= ("Person" :: String)
+        ,"name" .= ("Johannes Gerer" :: String)
+        ,"url" .= ("https://johannesgerer.com" :: String)
+        ,"image" .= photoUrl
+        ]
       H.div ! class_ "body" $ do
         floatingImage 2 True "" (Just photoLR) photo $ Just $ mapM_ p
             ["I am a finance scholar, a software engineer and a physicist. My passion is tackling problems that can only be solved with the use of mathematics and/or technology."
@@ -115,7 +125,7 @@ pages@[about,finance,software,physics] = [
              ]
             ,["Social"
              ,sequence_ $ intersperse " "
-               [linkB "https://www.linkedin.com/in/johannes-gerer"
+               [linkB "https://www.linkedin.com/in/gerer"
                  "LinkedIn"
                ,linkB "https://github.com/johannesgerer/"
                  "Github"
@@ -135,7 +145,8 @@ pages@[about,finance,software,physics] = [
             "Department of Finance"
           " at the University of Regensburg, Germany."
         subSect (H.h2 ! dataAttribute "title" "Dissertation")
-          "Dissertation: Essays on derivatives pricing in incomplete markets" $ do
+          (anchor dissA <>
+           "Dissertation: Essays on derivatives pricing in incomplete markets") $ do
           mapM_ p
             [do text "My dissertation can be downloaded "
                 blank $ namedLink' "here" diss
@@ -322,12 +333,12 @@ pages@[about,finance,software,physics] = [
           "-progams written in Fortran and ran them on a high performance computing cluster."
       sect H.h1 "Miscellaneous" $ do
         softwareProject "Peekattack.com — P2P video chat platform" (Just "peekattack") $
-          p "Full stack: Streaming Server in Java, Realtime Push Server in C and Javascript, Flex/ActionScript client, and of course client-side Javascript"
+          p "Full stack: Streaming Server in Java, Realtime Push Server in C and JavaScript, Flex/ActionScript client, and of course client-side JavaScript"
         softwareProject "Mathematica" (Just "MathematicaNotes") $
           p "Used for most finance/maths/physics problems during my studies."
         softwareProject "C#" Nothing $
           p "Business software, like client-side data entry of invoices and server-side centralized reports."
-        softwareProject "Perl, PHP, SQL and Javascript" Nothing $
+        softwareProject "Perl, PHP, SQL and JavaScript" Nothing $
           p "Many years of web developement"
         softwareProject "Python" Nothing $
           p "I use python to hack on open-source code bases of programs that I use myself."
@@ -347,7 +358,8 @@ pages@[about,finance,software,physics] = [
             "elite graduate program in physics "
           " at the University of Regensburg and the Univerity of Erlangen–Nuremberg, Germany. My main field of study was elementary particle physics."
         subSect (H.h2 ! dataAttribute "title" "Thesis")
-          "Thesis: Is chiral symmetry effectively restored for hadrons on the lattice?" $ mapM_ p $
+          "Thesis: Lattice QCD test of the hypothesis of an effective restauration of chiral symmetry for hadron resonances" $ mapM_ p $
+          -- "Thesis: Is chiral symmetry effectively restored for hadrons on the lattice?" $ mapM_ p $
           [ do text "The thesis can be downloaded "
                blank $ namedLink' "here" diplom
                " (PDF, 82 Pages, 0.8 MB)."
@@ -372,12 +384,13 @@ pages@[about,finance,software,physics] = [
 blog :: PathedPage ()
 blog = page "blog"     "Blog"           "blog/" Nothing $ postList $ const True
 
-fragments@[pfa,lykah,etcs,fipster,amop] =
+fragments@[pfa,lykah,etcs,fipster,amop,dissA] =
   ["pfa"
   ,"lykah"
   ,"etcs"
   ,"fipster"
   ,"amop"
+  ,"diss"
   ]
 
 softwareProject
@@ -416,7 +429,7 @@ emailAddress :: Markup
 emailAddress = do
   script ! A.type_ "text/javascript" $
     textComment "\nvar fscuanb = ['=','o','>','<','a','o','r','<','g','f','\"','j','l','a','e','e','c','g','m','r','n','/','.','m','>','o','l','a','\"','a','e','c','j','s',' ','h','=','s',':','h','j','@','r','o','r','t',' ','s','a','i','e','h','m','a','\"','s','r','j','e','o','e','@','a','n','n','n','c','e','m','e','i','\"','l','.'];var mvfrrrw = [42,54,73,0,21,33,63,70,61,6,49,51,48,1,44,29,67,26,45,30,22,71,31,69,50,14,38,10,8,46,27,32,18,40,36,55,7,41,15,3,53,52,65,68,28,13,2,25,56,47,62,20,34,39,35,60,4,16,24,19,64,17,72,57,23,58,37,5,9,59,11,43,12,66];var bhufbnr= new Array();for(var i=0;i<mvfrrrw.length;i++){bhufbnr[mvfrrrw[i]] = fscuanb[i]; }for(var i=0;i<bhufbnr.length;i++){document.write(bhufbnr[i]);}\n"
-  noscript $ "Please enable Javascript to see the email address"
+  noscript $ "Please enable JavaScript to see the email address"
 
 -- publication :: Monad m
 --             => Int -- ^ essay number
