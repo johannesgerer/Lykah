@@ -47,9 +47,9 @@ main = generateAssets True "output". renderWebsite =<< website
 assets :: [Pathed Asset]
 assets@(photo:photoLR:wincor:diss:diplom:tensor:dirac:memisScreen:
         haxCharts:_) =
-  [Pathed "img/me.jpg" "meJpg" Nothing Nothing
+  [Pathed "img/johannes_gerer.jpg" "meJpg" Nothing Nothing
     $ Copy "assets/me1.jpg"
-  ,Pathed "img/me_low_res.jpg" "meJpgLowRes" Nothing Nothing
+  ,Pathed "img/johannes_gerer_low_res.jpg" "meJpgLowRes" Nothing Nothing
     $ Copy "assets/me2.jpg"
   ,Pathed "img/wincor_nixdorf_keyboard.jpg" "wincor" Nothing Nothing
     $ Copy "assets/wincor_nixdorf_keyboarb.jpg"
@@ -241,7 +241,7 @@ pages@[about,finance,software,physics] = [
             ,"Manually enter transactions using an intelligent "
             <> "editor which reduces the required effort to a minimum."
             ]
-        softwareProject (anchor lykah <> "Lykah") (Just "lykah") $ p $ mconcat
+        softwareProject lykah (Just "lykah") $ p $ mconcat
           ["A static website and blog generator powering "
           ,linkB "http://johannesgerer.com" "johannesgerer.com"
           ,". It allows you to create websites with the "
@@ -272,11 +272,11 @@ pages@[about,finance,software,physics] = [
           floatingImage 1 True "border" Nothing haxCharts Nothing
           p $ "A library for cash-flow and tax simulations. The type system is used to ensure correctness e.g. of double-entry accounting, and the correct calculation of taxes. The use of Haskell's " <> code "do" <> "-notation and type-classes permit an almost verbatim translation of the tax code into the program."
           p "It currently includes personal income tax (Einkommensteuer), corporate tax (Körperschaftsteuer) and trade/business tax (Gewerbesteuer), but could easily be extended to other legal systems."
-      sect H.h1 "C++" $ do
+      sect H.h1 (anchor cpp <> "C++") $ do
         H.div $ mapM_ p $
           [ "What I appreciate about C++ is its expressiveness, while still being close enough to the machine to enable zero-cost abstractions. This makes it suitable for my use case: numerical software."
           ]
-        softwareProject (anchor fipster <> "Fipster") (Just "fipster") $ do
+        softwareProject fipster (Just "fipster") $ do
           p $ "Option pricing software for complex financial options on arbitrary dimensional state space using finite differences. "
             <> " It powers the numerical results published in my paper on "
             <> namedLinkF' amop "American options" finance
@@ -384,22 +384,24 @@ pages@[about,finance,software,physics] = [
 blog :: PathedPage ()
 blog = page "blog"     "Blog"           "blog/" Nothing $ postList $ const True
 
-fragments@[pfa,lykah,etcs,fipster,amop,dissA] =
+fragments@[pfa,lykah,etcs,fipster,amop,dissA,cpp] =
   ["pfa"
-  ,"lykah"
+  ,"Lykah"
   ,"etcs"
-  ,"fipster"
+  ,"Fipster"
   ,"amop"
   ,"diss"
+  ,"cpp"
   ]
 
 softwareProject
   :: Monad m
-  => MarkupT m () -- ^ title
+  => String -- ^ title
   -> Maybe AttributeValue -- ^ github repo name
   -> MarkupT m () -- ^ body
   -> MarkupT m ()
-softwareProject title repo body = subSect H.h3 title $ do
+softwareProject title repo body =
+  subSect H.h3 (anchor (fromString title) <> string title) $ do
   body
   maybe mempty
     (\repo' ->
