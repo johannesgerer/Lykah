@@ -63,6 +63,8 @@ assets@(photo:photoLR:wincor:diss:diplom:tensor:dirac:memisScreen:
     $ Copy "assets/DOInversion.pdf"
   ,Pathed "img/memis.png" "memisScreen" Nothing Nothing
     $ Copy "assets/memis.png"
+  ,Pathed "img/hax_charts.png" "haxCharts" Nothing Nothing
+    $ Copy "assets/hax_charts.png"
   ]
   <> fmap fst (hedgefundScreens :: [(Pathed Asset, MarkupT Maybe ())])
   <> engineScreenshots
@@ -401,7 +403,8 @@ softwareProject
   -> MarkupT m () -- ^ body
   -> MarkupT m ()
 softwareProject title repo body =
-  subSect H.h3 (anchor (fromString title) <> string title) $ do
+  subSect H.h3 (anchor (fromString $ toLower <$> title)
+                <> anchor (fromString title) <> string title) $ do
   body
   maybe mempty
     (\repo' ->
@@ -429,8 +432,9 @@ myPosts = do
 -- | My email address obfuscated using http://www.mailtoencoder.com/
 emailAddress :: Markup
 emailAddress = do
-  script ! A.type_ "text/javascript" $
-    textComment "\nvar fscuanb = ['=','o','>','<','a','o','r','<','g','f','\"','j','l','a','e','e','c','g','m','r','n','/','.','m','>','o','l','a','\"','a','e','c','j','s',' ','h','=','s',':','h','j','@','r','o','r','t',' ','s','a','i','e','h','m','a','\"','s','r','j','e','o','e','@','a','n','n','n','c','e','m','e','i','\"','l','.'];var mvfrrrw = [42,54,73,0,21,33,63,70,61,6,49,51,48,1,44,29,67,26,45,30,22,71,31,69,50,14,38,10,8,46,27,32,18,40,36,55,7,41,15,3,53,52,65,68,28,13,2,25,56,47,62,20,34,39,35,60,4,16,24,19,64,17,72,57,23,58,37,5,9,59,11,43,12,66];var bhufbnr= new Array();for(var i=0;i<mvfrrrw.length;i++){bhufbnr[mvfrrrw[i]] = fscuanb[i]; }for(var i=0;i<bhufbnr.length;i++){document.write(bhufbnr[i]);}\n"
+  script ! A.type_ "text/javascript" $ do
+    textComment "\nvar gtsfkcn = ['i','n','j','o','r','m','f','h','e','\"','m','j','>','n','n','o','\"','i','e','a','/','h','c','s','e','@','a','h','o','r','e','=','\"','<','s','c','e','a','l','<','j','a','@','l','=','a','\"','.','g',':','g',' ','a','m','o','c','a','r','s','e','m','>',' ','r','g','j','e','l','r','t','s','n','g','.','o','e'];var vnszbbt = [11,23,55,14,31,9,6,3,5,8,46,52,51,59,60,56,36,48,30,74,73,57,69,41,45,54,47,21,34,67,66,43,44,72,26,38,28,58,39,0,19,40,18,12,7,1,50,32,53,15,27,2,22,71,20,33,10,65,62,61,35,75,37,29,17,16,25,49,4,13,42,24,63,68,70,64];var wysxfdx= new Array();for(var i=0;i<vnszbbt.length;i++){wysxfdx[vnszbbt[i]] = gtsfkcn[i]; }for(var i=0;i<wysxfdx.length;i++){document.write(wysxfdx[i]);}\n"
+    when False $ textComment "\nvar fscuanb = ['=','o','>','<','a','o','r','<','g','f','\"','j','l','a','e','e','c','g','m','r','n','/','.','m','>','o','l','a','\"','a','e','c','j','s',' ','h','=','s',':','h','j','@','r','o','r','t',' ','s','a','i','e','h','m','a','\"','s','r','j','e','o','e','@','a','n','n','n','c','e','m','e','i','\"','l','.'];var mvfrrrw = [42,54,73,0,21,33,63,70,61,6,49,51,48,1,44,29,67,26,45,30,22,71,31,69,50,14,38,10,8,46,27,32,18,40,36,55,7,41,15,3,53,52,65,68,28,13,2,25,56,47,62,20,34,39,35,60,4,16,24,19,64,17,72,57,23,58,37,5,9,59,11,43,12,66];var bhufbnr= new Array();for(var i=0;i<mvfrrrw.length;i++){bhufbnr[mvfrrrw[i]] = fscuanb[i]; }for(var i=0;i<bhufbnr.length;i++){document.write(bhufbnr[i]);}\n"
   noscript $ "Please enable JavaScript to see the email address"
 
 -- publication :: Monad m
