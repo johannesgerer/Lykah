@@ -111,7 +111,9 @@ pages@[about,finance,software,physics] = [
         floatingImage 2 True "" (Just photoLR) photo $ Just $ mapM_ p
             ["I am a finance scholar, a software engineer and a physicist. My passion is tackling problems that can only be solved with the use of mathematics and/or technology."
             ,do
-              text "Recently, I have received a PhD (Dr. rer. pol) in mathematical finance from the University of Regensburg, Germany. "
+              text "In 2017, I joined Goldman Sachs as an Equities Trading Strat in London."
+            ,do
+              text "I have received a PhD (Dr. rer. pol) in mathematical finance from the University of Regensburg, Germany. "
               more finance
             ,do
               text "Before that, I pursued a Master of Science degree (Diplom) in theoretical particle physics. "
@@ -136,7 +138,7 @@ pages@[about,finance,software,physics] = [
                ]
              ]
             ,["Residence"
-             ,"Munich, Germany"
+             ,"London"
              ]
             ]
     ,page "finance" "Finance"       "finance/" Nothing $ do
